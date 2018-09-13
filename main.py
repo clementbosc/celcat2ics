@@ -87,7 +87,7 @@ def get_all_events(year, formation):
     for day in range(1, 365, 15):
         day_date = get_date(year, day)
 
-        if (day_date - datetime.timedelta(days=15)) < present:
+        if (day_date + datetime.timedelta(days=15)) < present:
             continue
 
         link = 'https://edt.univ-tlse3.fr/calendar/default.aspx?View=month&Type=group&ResourceName=' + formation + '&Date=' + day_date.strftime(
