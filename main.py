@@ -9,6 +9,21 @@ import ssl
 import uuid
 from io import BytesIO
 
+color_to_type_tab = {
+    '#00FF00': 'CONFÉRENCE',
+    '#7D4F72': 'COURS/TD',
+    '#408080': 'TP',
+    '#FFFF80': 'RÉUNION',
+    '#8080C0': 'TP NON ENCADRÉ'
+}
+
+
+def color_to_type(color):
+    if color in color_to_type_tab:
+        return color_to_type_tab[color]
+
+    return None
+
 
 def utc_to_local(dt):
     local = pytz.timezone("Europe/Paris")
@@ -36,7 +51,10 @@ def get_events(link):
         events = json.loads(match)
 
         for event in events:
-            type, name, salle = event_text_parser(event['text'])
+            # type, name, salle = event_text_parser(event['text'])
+            name, salle = event_text_parser(event['text'])
+
+            type = color_to_type(event['backColor'])
 
             e = {
                 'type': type,
@@ -55,17 +73,30 @@ def get_events(link):
 
 
 def event_text_parser(text):
-    regex = r"^(?:\([0-9-:]+\))<br>([A-Z\/ ]+)<br>(?:(?:.{8} - (.+)<br>.+<br>(.+))|(?:.+<br>(.+)<br>(.+)))$"
+    # regex = r"^(?:\([0-9-:]+\))<br>([A-Z\/ ]+)<br>(?:(?:.{8} - (.+)<br>.+<br>(.+))|(?:.+<br>(.+)<br>(.+)))$"
+    regex = r"^(?:(?:.{8} - (.+)<br>.+<br>(.+))|(?:.+<br>(.+)))$"
     m = re.search(regex, text)
 
+    # if m is None:
+    #     return None, None, None
+
+    # groups = m.groups()
+
+    # if groups[3] is None or groups[4] is None:
+    #     return groups[0], groups[1], groups[2]  # type, name, salle
+    #
+    # return groups[0], groups[4], groups[3]  # type, name, salle
+
     if m is None:
-        return None, None, None
+        return None, None
 
     groups = m.groups()
-    if groups[3] is None or groups[4] is None:
-        return groups[0], groups[1], groups[2]  # type, name, salle
 
-    return groups[0], groups[4], groups[3]  # type, name, salle
+    if groups[2] is None:  # cours classique
+        return groups[0], groups[1]  # name, salle
+
+    # évènement
+    return "", groups[2]  # name, salle
 
 
 def get_date(year, day):
