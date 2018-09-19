@@ -153,6 +153,7 @@ def generate_ics(formation, year):
         file.write(("DTEND:" + date_for_cal(e['end']) + "\n").encode('utf-8'))
         file.write(("LOCATION:" + e['salle'] + "\n").encode('utf-8'))
         file.write(("SUMMARY:" + e['type'] + " - " + e['name'] + "\n").encode('utf-8'))
+        file.write("FBTYPE:BUSY-UNAVAILABLE\n".encode('utf-8'))
         file.write("END:VEVENT\n".encode('utf-8'))
 
     file.write("END:VCALENDAR".encode('utf-8'))
