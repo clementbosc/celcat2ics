@@ -14,7 +14,10 @@ color_to_type_tab = {
     '#7D4F72': 'COURS/TD',
     '#408080': 'TP',
     '#FFFF80': 'RÉUNION',
-    '#8080C0': 'TP NON ENCADRÉ'
+    '#8080C0': 'TP NON ENCADRÉ',
+    '#8080FF': 'COURS',
+    '#FF8080': 'TD',
+    '#FCFAAB': 'MISE À NIVEAU'
 }
 
 
@@ -22,7 +25,7 @@ def color_to_type(color):
     if color in color_to_type_tab:
         return color_to_type_tab[color]
 
-    return None
+    return ''
 
 
 def get_summary(event):
@@ -65,7 +68,12 @@ def get_events(link):
         events = json.loads(match)
 
         for event in events:
+            if event['text'].startswith('Global Event'):
+                continue
+
             type, name, salle, details = event_text_parser(event['text'])
+            type = color_to_type(event['backColor']) if type is None else type
+            name = '' if name is None else name
 
             e = {
                 'type': type,
@@ -78,20 +86,24 @@ def get_events(link):
                 'id': event['id']
             }
 
-            if event['text'].startswith('Global Event') or type is None:
-                continue
+            # if type is None:
+            #     continue
 
             yield e
 
 
 def event_text_parser(text):
-    regex = r"^\([0-9-:]+\)<br>(?P<type>(?:(?!<br>).)*)(?:<br>[A-Z0-9]{8} - )?(?P<cours>(?:(?!<br>).)*)<br>(?:(?!<br>).)*<br>(?P<salle>(?:(?!<br>).)*)(?:<br>(?P<complement>.+))?$"
+    regex = r"^(?:\([0-9-:]+\)<br>(?P<type>(?:(?!<br>).)*)<br>)?(?P<cours>[A-Z0-9]{8} - (?:(?!<br>).)*<br>)?(?:(?!<br>).)*<br>(?P<salle>(?:(?!<br>).)*)(?:<br>(?P<complement>(?:(?!<br>).)*))?$"
+    # regex = r"^\([0-9-:]+\)<br>(?P<type>(?:(?!<br>).)*)(?:<br>[A-Z0-9]{8} - )?(?P<cours>(?:(?!<br>).)*)<br>(?:(?!<br>).)*<br>(?P<salle>(?:(?!<br>).)*)(?:<br>(?P<complement>.+))?$"
     m = re.search(regex, text)
 
     if m is None:
         return None, None, None, None
 
-    return m.groupdict().values()
+    values = list(m.groupdict().values())
+    print(values)
+    values[1] = values[1][11:-4] if values[1] is not None else values[1]
+    return values
 
 
 def get_date(year, day):
