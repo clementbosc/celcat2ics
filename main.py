@@ -146,10 +146,10 @@ def generate_ics(formation, year, filtre_yes=None, filtre_no=None):
     events = get_all_events(year, formation)
 
     if filtre_yes is not None:
-        events = list(filter(lambda x: x['type'] in filtre_yes, events))
+        events = list(filter(lambda x: x['type'] in delete_case(filtre_yes), events))
 
     if filtre_no is not None:
-        events = list(filter(lambda x: x['type'] not in filtre_no, events))
+        events = list(filter(lambda x: x['type'] not in delete_case(filtre_no), events))
 
     file = BytesIO()
 
@@ -175,6 +175,10 @@ def generate_ics(formation, year, filtre_yes=None, filtre_no=None):
     file.write("END:VCALENDAR".encode('utf-8'))
     file.seek(0)
     return file
+
+
+def delete_case(l):
+    return list(map(lambda x: x.upper(), l))
 
 
 if __name__ == '__main__':
