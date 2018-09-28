@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     formation = request.args.get('formation')
-    year = int(request.args.get('year'))
+    year = request.args.get('year')
     filtre_yes = request.args.getlist('filtre_yes')
     filtre_no = request.args.getlist('filtre_no')
 
@@ -19,7 +19,8 @@ def hello_world():
         filtre_no = None
 
     if year is None:
-        year = int(datetime.datetime.now().year)
+        year = datetime.datetime.now().year
+    year = int(year)
 
     return send_file(generate_ics(formation, year, filtre_yes, filtre_no),
                      as_attachment=True,
