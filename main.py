@@ -10,14 +10,15 @@ import uuid
 from io import BytesIO
 
 color_to_type_tab = {
-    '#00FF00': 'CONFÉRENCE',
+    '#00FF00': 'CONFERENCE',
     '#7D4F72': 'COURS/TD',
     '#408080': 'TP',
-    '#FFFF80': 'RÉUNION',
+    '#FFFF80': 'REUNION',
     '#8080C0': 'TP NON ENCADRÉ',
     '#8080FF': 'COURS',
     '#FF8080': 'TD',
-    '#FCFAAB': 'MISE À NIVEAU'
+    '#FCFAAB': 'MISE À NIVEAU',
+    '#FF8000': 'EXAMEN'
 }
 
 
@@ -95,14 +96,12 @@ def get_events(link):
 
 def event_text_parser(text):
     regex = r"^(?:\([0-9-:]+\)<br>(?P<type>(?:(?!<br>).)*)<br>)?(?P<cours>[A-Z0-9]{8} - (?:(?!<br>).)*<br>)?(?:(?!<br>).)*<br>(?P<salle>(?:(?!<br>).)*)(?:<br>(?P<complement>(?:(?!<br>).)*))?$"
-    # regex = r"^\([0-9-:]+\)<br>(?P<type>(?:(?!<br>).)*)(?:<br>[A-Z0-9]{8} - )?(?P<cours>(?:(?!<br>).)*)<br>(?:(?!<br>).)*<br>(?P<salle>(?:(?!<br>).)*)(?:<br>(?P<complement>.+))?$"
     m = re.search(regex, text)
 
     if m is None:
         return None, None, None, None
 
     values = list(m.groupdict().values())
-    print(values)
     values[1] = values[1][11:-4] if values[1] is not None else values[1]
     return values
 
@@ -143,8 +142,15 @@ def date_for_cal(date):
     return date.strftime('%Y%m%dT%H%M%SZ')
 
 
-def generate_ics(formation, year):
+def generate_ics(formation, year, filtre_yes=None, filtre_no=None):
     events = get_all_events(year, formation)
+
+    if filtre_yes is not None:
+        events = list(filter(lambda x: x['type'] in filtre_yes, events))
+
+    if filtre_no is not None:
+        events = list(filter(lambda x: x['type'] not in filtre_no, events))
+
     file = BytesIO()
 
     file.write("BEGIN:VCALENDAR\n".encode('utf-8'))
@@ -175,4 +181,4 @@ if __name__ == '__main__':
     formation = 'formation_EIINDE_s1_TDA1'
     year = 2018
 
-    generate_ics(formation, year)
+    generate_ics(formation, year, ['TP', 'CONFERENCE'])
