@@ -17,7 +17,7 @@ color_to_type_tab = {
     '#8080C0': 'TP NON ENCADRÉ',
     '#8080FF': 'COURS',
     '#FF8080': 'TD',
-    '#FCFAAB': 'MISE À NIVEAU',
+    '#FCFAAB': 'SOUTIEN',
     '#FF8000': 'EXAMEN'
 }
 
