@@ -73,9 +73,10 @@ def get_events(link):
                 continue
 
             type, name, salle, details = event_text_parser(event['text'])
-            type = color_to_type(event['backColor']) if type is None else type
+            type = color_to_type(event['backColor']) if (type is None and 'backColor' in event) else type
             name = '' if name is None else name
             salle = '' if salle is None else salle
+            type = '' if type is None else type
 
             e = {
                 'type': type,
