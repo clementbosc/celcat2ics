@@ -1,6 +1,10 @@
-.container {
+.container, .container-fluid {
   padding-top: 50px;
   padding-bottom: 50px; }
 
-  .card {
-    margin-bottom: 10px; }
+  .container-fluid {
+    padding-left: 5%;
+    padding-right: 5%; }
+
+    .card {
+      margin-bottom: 10px; }
