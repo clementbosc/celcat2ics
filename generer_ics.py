@@ -182,6 +182,10 @@ def delete_case(l):
     return list(map(lambda x: x.upper(), l))
 
 
+def build_ics_link(ressource_name):
+    return '/?formation='+ressource_name
+
+
 if __name__ == '__main__':
     formation = 'formation_EIINDE_s1_TDA1'
     year = 2018
