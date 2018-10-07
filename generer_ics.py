@@ -170,6 +170,7 @@ def generate_ics(formation, year, filtre_yes=None, filtre_no=None):
         file.write(("LOCATION:" + e['salle'] + "\n").encode('utf-8'))
         file.write(("DESCRIPTION:" + notes + "\n").encode('utf-8'))
         file.write(("SUMMARY:" + summary + "\n").encode('utf-8'))
+        file.write("TRANSP:OPAQUE\n".encode('utf-8'))
         file.write("FBTYPE:BUSY-UNAVAILABLE\n".encode('utf-8'))
         file.write("END:VEVENT\n".encode('utf-8'))
 
