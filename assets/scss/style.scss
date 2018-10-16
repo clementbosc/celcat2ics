@@ -3,6 +3,11 @@
     padding-bottom: 50px;
 }
 
+.container-fluid > .container{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .container-fluid{
     padding-left: 5%;
     padding-right: 5%;

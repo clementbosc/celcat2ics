@@ -1,68 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Lien vers le fichier ICS</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body class="ics_link">
+{% extends "layout.html" %}
+{% block title %}Lien vers le fichier ICS{% endblock %}
+{% block head %}
+    {{ super() }}
 
-<div class="container">
-    <h1 class="text-center mb-4">Abonnement à l'ICS</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="input-group input-group-lg mb-5">
-                <input class="form-control" type="text" id="ics_link"
-                       value="https://{{ request.host }}{{ link }}">
-                <div class="input-group-append">
-                    <button class="copy-btn btn btn-primary" data-clipboard-target="#ics_link">
-                        Copier
-                    </button>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mb-4">Abonnement à l'ICS</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="input-group input-group-lg mb-5">
+                    <input class="form-control" type="text" id="ics_link"
+                           value="https://{{ request.host }}{{ link }}">
+                    <div class="input-group-append">
+                        <button class="copy-btn btn btn-primary" data-clipboard-target="#ics_link">
+                            Copier &nbsp;<i class="far fa-copy"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Ajout à Google Agenda</h2>
-            <p>Accédez à <a href="https://calendar.google.com/">https://calendar.google.com/</a>, connectez-vous à votre
-                compte Google et dans le bandeau de droite cliquez sur <b>+</b> puis <b>A partir d'une URL</b>. Collez
-                le
-                lien généré ci-dessus puis validez. Pour consulter l'emploi du temps sur votre smartphone (iOS/Android),
-                téléchargez l'applciation
-                <a href="https://www.google.com/calendar/about/">Google Agenda</a>.</p>
-            <img src="{{ url_for('static', filename='img/google_agenda.png') }}" alt="" width="80%">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Ajout à Google Agenda</h2>
+                <p>Accédez à <a href="https://calendar.google.com/">https://calendar.google.com/</a>, connectez-vous à
+                    votre
+                    compte Google et dans le bandeau de droite cliquez sur <b>+</b> puis <b>A partir d'une URL</b>.
+                    Collez
+                    le
+                    lien généré ci-dessus puis validez. Pour consulter l'emploi du temps sur votre smartphone
+                    (iOS/Android),
+                    téléchargez l'applciation
+                    <a href="https://www.google.com/calendar/about/">Google Agenda</a>.</p>
+                <img src="{{ url_for('static', filename='img/google_agenda.png') }}" alt="" width="80%">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Ajout à Apple Calendar (iPhone/iPad)</h2>
+                <p>Accédez à l'application <b>Réglages</b>, puis <b>Mots de passe et comptes</b>, puis <b>Ajouter un
+                    compte</b>. Cliquez sur <b>Autres</b> et <b>Ajouter un cal. avec abonnement</b>. Enfin renseignez le
+                    lien ci-dessus puis cliquez sur <b>Suivant</b>. Le champ <b>Description</b> permet de donner un nom
+                    plus
+                    reconnaissable au calendrier. Validez en cliquant sur <b>Enregistrer</b>.</p>
+                <img src="{{ url_for('static', filename='img/ical_process.png') }}" alt="" width="100%">
+            </div>
         </div>
     </div>
+{% endblock %}
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Ajout à Apple Calendar (iPhone/iPad)</h2>
-            <p>Accédez à l'application <b>Réglages</b>, puis <b>Mots de passe et comptes</b>, puis <b>Ajouter un
-                compte</b>. Cliquez sur <b>Autres</b> et <b>Ajouter un cal. avec abonnement</b>. Enfin renseignez le
-                lien ci-dessus puis cliquez sur <b>Suivant</b>. Le champ <b>Description</b> permet de donner un nom plus
-                reconnaissable au calendrier. Validez en cliquant sur <b>Enregistrer</b>.</p>
-            <img src="{{ url_for('static', filename='img/ical_process.png') }}" alt="" width="100%">
-        </div>
-    </div>
-</div>
+{% block js %}
+    <script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+    <script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-<script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
-<script>
-    new ClipboardJS('.copy-btn');
-</script>
-</body>
-</html>
+        $('.copy-btn').tooltip({
+            trigger: 'click',
+            placement: 'bottom'
+        });
+
+        function setTooltip(message) {
+            $('.copy-btn').tooltip('hide')
+                .attr('data-original-title', message)
+                .tooltip('show');
+        }
+
+        function hideTooltip() {
+            setTimeout(function () {
+                $('.copy-btn').tooltip('hide');
+            }, 1000);
+        }
+
+
+        var clipboard = new ClipboardJS('.copy-btn');
+
+        clipboard.on('success', function (e) {
+            setTooltip('Copié !');
+            hideTooltip();
+        });
+
+        clipboard.on('error', function (e) {
+            setTooltip('Failed!');
+            hideTooltip();
+        });
+    </script>
+{% endblock %}
