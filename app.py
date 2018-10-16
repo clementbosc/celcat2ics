@@ -13,12 +13,14 @@ Scss(app, static_dir='static/css', asset_dir='assets')
 
 @app.route('/')
 def hello_world():
-    formation = request.args.get('formation')
+    formation = request.args.getlist('formation')
     year = request.args.get('year')
     filtre_yes = request.args.getlist('filtre_yes')
     filtre_no = request.args.getlist('filtre_no')
+    filtre_group = request.args.getlist('filtre_group')
+    type = request.args.get('type')  # group or module
 
-    if formation is None:
+    if len(formation) == 0:
         return redirect('/choisir-parcours', code=302)
 
     if len(filtre_yes) == 0:
@@ -27,11 +29,17 @@ def hello_world():
     if len(filtre_no) == 0:
         filtre_no = None
 
+    if len(filtre_group) == 0:
+        filtre_group = None
+
     if year is None:
         year = datetime.datetime.now().year
     year = int(year)
 
-    return send_file(generate_ics(formation, year, filtre_yes, filtre_no),
+    if type is None:
+        type = 'group'
+
+    return send_file(generate_ics(formation, year, type, filtre_yes, filtre_no, filtre_group),
                      as_attachment=True,
                      attachment_filename='calendar.ics')
 
