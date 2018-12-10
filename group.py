@@ -15,7 +15,7 @@ class Group:
     def get_all_groups(parcours_link, base_link='https://edt.univ-tlse3.fr/FSI/2018_2019/'):
 
         groups = {}
-        edt_link = 'https://edt.univ-tlse3.fr'
+        edt_link = '://edt.univ-tlse3.fr'
 
         context = ssl._create_unverified_context()
 
@@ -25,10 +25,8 @@ class Group:
             links = soup.findAll('a')
 
             for a in links:
-                if not a['href'].startswith(edt_link):
-                    continue
-
-                groups[a.text] = Group.get_ressource_name(a['href'])
+                if a['href'].startswith('http'+edt_link) or a['href'].startswith('https'+edt_link):
+                    groups[a.text] = Group.get_ressource_name(a['href'])
 
         return groups
 
